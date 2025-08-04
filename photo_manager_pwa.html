@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Wellness Photos">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Wellness Photo Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            min-height: calc(100vh - 20px);
+        }
+
+        .header {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-section {
+            padding: 30px 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .photo-upload {
+            border: 3px dashed #3498db;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+            touch-action: manipulation;
+        }
+
+        .photo-upload:hover, .photo-upload:active {
+            background-color: #f8f9ff;
+        }
+
+        .photo-upload.dragover {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:hover, .btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .photos-section {
+            padding: 0 20px 20px;
+        }
+
+        .photos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .photos-count {
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            padding: 10px 20px;
+            width: auto;
+            font-size: 14px;
+        }
+
+        .photo-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .photo-thumb {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #e0e0e0;
+        }
+
+        .photo-info {
+            flex: 1;
+        }
+
+        .photo-filename {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .photo-details {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .form-section {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📸 Wellness Photo Manager</h1>
+            <p>Capture, organize, and download your inspection photos</p>
+        </div>
+
+        <div class="form-section">
+            <div class="input-group">
+                <label for="restaurantNumber">Restaurant Number</label>
+                <input type="number" id="restaurantNumber" placeholder="e.g., 1916" required>
+            </div>
+
+            <div class="input-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" placeholder="e.g., Kitchen, Dining Room, Office" required>
+            </div>
+
+            <div class="input-group">
+                <label for="equipmentType">Equipment Type</label>
+                <select id="equipmentType" required>
+                    <option value="">Select equipment type</option>
+                    <option value="POS">POS Terminal</option>
+                    <option value="KPS">Kitchen Display System</option>
+                    <option value="CD">Cash Drawer</option>
+                    <option value="Printer">Printer</option>
+                    <option value="Network">Network Equipment</option>
+                    <option value="AP">Access Point</option>
+                    <option value="Scanner">Scanner/Barcode Reader</option>
+                    <option value="UPS">UPS/Battery Backup</option>
+                    <option value="Router">Router</option>
+                    <option value="Switch">Network Switch</option>
+                    <option value="Modem">Modem</option>
+                    <option value="Tablet">Tablet</option>
+                    <option value="Monitor">Monitor/Display</option>
+                    <option value="Server">Server</option>
+                    <option value="Cable">Cabling/Infrastructure</option>
+                    <option value="Other">Other IT Equipment</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="beforeAfter">Before/After</label>
+                <select id="beforeAfter" required>
+                    <option value="">Select status</option>
+                    <option value="Before">Before</option>
+                    <option value="After">After</option>
+                </select>
+            </div>
+
+            <div class="photo-upload" id="photoUpload">
+                <div class="upload-icon">📷</div>
+                <p><strong>Tap to Take Photo</strong></p>
+                <p style="font-size: 16px; color: #7f8c8d; margin-top: 10px;">
+                    Camera will open automatically
+                </p>
+                <input type="file" id="photoInput" accept="image/*" capture="environment" style="display: none;">
+            </div>
+
+            <button class="btn" id="addPhotoBtn" disabled>Add Photo</button>
+        </div>
+
+        <div class="photos-section" id="photosSection">
+            <div class="photos-header">
+                <h3>📁 Captured Photos</h3>
+                <span class="photos-count" id="photosCount">0 photos</span>
+            </div>
+            <div id="photosList"></div>
+            <button class="btn download-btn hidden" id="downloadBtn">
+                📥 Download All Photos (ZIP)
+            </button>
+        </div>
+
+        <div id="status"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        class PhotoManager {
+            constructor() {
+                this.photos = [];
+                this.initializeElements();
+                this.attachEventListeners();
+                this.updateUI();
+            }
+
+            initializeElements() {
+                this.restaurantNumber = document.getElementById('restaurantNumber');
+                this.location = document.getElementById('location');
+                this.equipmentType = document.getElementById('equipmentType');
+                this.beforeAfter = document.getElementById('beforeAfter');
+                this.photoUpload = document.getElementById('photoUpload');
+                this.photoInput = document.getElementById('photoInput');
+                this.addPhotoBtn = document.getElementById('addPhotoBtn');
+                this.photosList = document.getElementById('photosList');
+                this.photosCount = document.getElementById('photosCount');
+                this.downloadBtn = document.getElementById('downloadBtn');
+                this.status = document.getElementById('status');
+            }
+
+            attachEventListeners() {
+                // Form validation
+                const formInputs = [this.restaurantNumber, this.location, this.equipmentType, this.beforeAfter];
+                formInputs.forEach(input => {
+                    input.addEventListener('input', () => this.validateForm());
+                    input.addEventListener('change', () => this.validateForm());
+                });
+
+                // Photo upload
+                this.photoUpload.addEventListener('click', () => this.photoInput.click());
+                this.photoInput.addEventListener('change', (e) => this.handleFileSelect(e));
+
+                // Drag and drop
+                this.photoUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.photoUpload.classList.add('dragover');
+                });
+
+                this.photoUpload.addEventListener('dragleave', () => {
+                    this.photoUpload.classList.remove('dragover');
+                });
+
+                this.photoUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.photoUpload.classList.remove('dragover');
+                    this.handleFileSelect(e);
+                });
+
+                // Add photo button
+                this.addPhotoBtn.addEventListener('click', () => this.addCurrentPhoto());
+
+                // Download button
+                this.downloadBtn.addEventListener('click', () => this.downloadPhotos());
+            }
+
+            validateForm() {
+                const isValid = this.restaurantNumber.value && 
+                                this.location.value && 
+                                this.equipmentType.value && 
+                                this.beforeAfter.value &&
+                                this.photoInput.files.length > 0;
+
+                this.addPhotoBtn.disabled = !isValid;
+            }
+
+            handleFileSelect(event) {
+                const files = event.target ? event.target.files : event.dataTransfer.files;
+                if (files.length > 0) {
+                    const file = files[0];
+                    if (file.type.startsWith('image/')) {
+                        this.validateForm();
+                        this.showStatus('Photo selected: ' + file.name, 'success');
+                    } else {
+                        this.showStatus('Please select an image file', 'error');
+                    }
+                }
+            }
+
+            generateFilename(restaurantNum, location, equipment, beforeAfter, extension, index = '') {
+                // Format restaurant number with leading zeros (5 digits)
+                const formattedRestaurant = restaurantNum.toString().padStart(5, '0');
+                
+                // Clean up values (remove spaces)
+                const cleanLocation = location.replace(/\s+/g, '');
+                const cleanEquipment = equipment.replace(/\s+/g, '');
+                const cleanBeforeAfter = beforeAfter.replace(/\s+/g, '');
+                
+                // Add index suffix if provided
+                const suffix = index ? `_${index}` : '';
+                
+                return `${formattedRestaurant}-${cleanLocation}-${cleanEquipment}-${cleanBeforeAfter}${suffix}.${extension}`;
+            }
+
+            addCurrentPhoto() {
+                const file = this.photoInput.files[0];
+                if (!file) return;
+
+                const restaurantNum = this.restaurantNumber.value;
+                const location = this.location.value;
+                const equipment = this.equipmentType.value;
+                const beforeAfter = this.beforeAfter.value;
+
+                // Get file extension
+                const extension = file.name.split('.').pop().toLowerCase();
+
+                // Check for duplicate filenames and add index if needed
+                let index = '';
+                let baseFilename = this.generateFilename(restaurantNum, location, equipment, beforeAfter, extension);
+                let filename = baseFilename;
+                let counter = 1;
+
+                while (this.photos.some(photo => photo.filename === filename)) {
+                    index = counter.toString();
+                    filename = this.generateFilename(restaurantNum, location, equipment, beforeAfter, extension, index);
+                    counter++;
+                }
+
+                // Create photo object
+                const photoData = {
+                    id: Date.now(),
+                    file: file,
+                    filename: filename,
+                    restaurantNumber: restaurantNum,
+                    location: location,
+                    equipmentType: equipment,
+                    beforeAfter: beforeAfter,
+                    timestamp: new Date().toLocaleString()
+                };
+
+                this.photos.push(photoData);
+                this.updateUI();
+                this.resetForm();
+                this.showStatus(`Photo added: ${filename}`, 'success');
+            }
+
+            resetForm() {
+                this.photoInput.value = '';
+                this.addPhotoBtn.disabled = true;
+            }
+
+            deletePhoto(photoId) {
+                this.photos = this.photos.filter(photo => photo.id !== photoId);
+                this.updateUI();
+                this.showStatus('Photo deleted', 'success');
+            }
+
+            updateUI() {
+                // Update photos count
+                this.photosCount.textContent = `${this.photos.length} photo${this.photos.length !== 1 ? 's' : ''}`;
+
+                // Show/hide download button
+                if (this.photos.length > 0) {
+                    this.downloadBtn.classList.remove('hidden');
+                } else {
+                    this.downloadBtn.classList.add('hidden');
+                }
+
+                // Update photos list
+                this.photosList.innerHTML = '';
+                this.photos.forEach(photo => {
+                    const photoItem = this.createPhotoItem(photo);
+                    this.photosList.appendChild(photoItem);
+                });
+            }
+
+            createPhotoItem(photo) {
+                const item = document.createElement('div');
+                item.className = 'photo-item';
+
+                // Create thumbnail
+                const thumb = document.createElement('img');
+                thumb.className = 'photo-thumb';
+                thumb.src = URL.createObjectURL(photo.file);
+
+                // Create info section
+                const info = document.createElement('div');
+                info.className = 'photo-info';
+                info.innerHTML = `
+                    <div class="photo-filename">${photo.filename}</div>
+                    <div class="photo-details">
+                        ${photo.restaurantNumber} • ${photo.location} • ${photo.equipmentType} • ${photo.beforeAfter}<br>
+                        Added: ${photo.timestamp}
+                    </div>
+                `;
+
+                // Create delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '🗑️';
+                deleteBtn.onclick = () => this.deletePhoto(photo.id);
+
+                item.appendChild(thumb);
+                item.appendChild(info);
+                item.appendChild(deleteBtn);
+
+                return item;
+            }
+
+            async downloadPhotos() {
+                if (this.photos.length === 0) return;
+
+                try {
+                    const zip = new JSZip();
+
+                    // Add each photo to the zip
+                    for (const photo of this.photos) {
+                        zip.file(photo.filename, photo.file);
+                    }
+
+                    // Generate zip file
+                    const content = await zip.generateAsync({type: 'blob'});
+
+                    // Create download link
+                    const restaurantNum = this.photos[0].restaurantNumber.padStart(5, '0');
+                    const timestamp = new Date().toISOString().split('T')[0];
+                    const zipFilename = `WellnessPhotos_${restaurantNum}_${timestamp}.zip`;
+
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(content);
+                    link.download = zipFilename;
+                    link.click();
+
+                    this.showStatus(`Downloaded: ${zipFilename}`, 'success');
+                } catch (error) {
+                    this.showStatus('Error creating download: ' + error.message, 'error');
+                }
+            }
+
+            showStatus(message, type) {
+                this.status.innerHTML = `<div class="status ${type}">${message}</div>`;
+                setTimeout(() => {
+                    this.status.innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new PhotoManager();
+        });
+
+        // Register service worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,console.log("SW registered")');
+        }
+    </script>
+</body>
+</html>

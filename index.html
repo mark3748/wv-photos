@@ -259,6 +259,8 @@
         <div class="header">
             <h1>📸 Wellness Photo Manager</h1>
             <p>Capture, organize, and download your inspection photos</p>
+            <p>***</p>
+            <p>Note: Refreshing page will lose all photos that have not been downloaded. The names will be saved but you will need to re-upload the photos.</p>
         </div>
 
         <div class="form-section">
@@ -336,6 +338,7 @@
             constructor() {
                 this.photos = [];
                 this.initializeElements();
+                this.loadState();
                 this.attachEventListeners();
                 this.updateUI();
             }
@@ -355,11 +358,17 @@
             }
 
             attachEventListeners() {
-                // Form validation
+                // Form validation and auto-save
                 const formInputs = [this.restaurantNumber, this.location, this.equipmentType, this.beforeAfter];
                 formInputs.forEach(input => {
-                    input.addEventListener('input', () => this.validateForm());
-                    input.addEventListener('change', () => this.validateForm());
+                    input.addEventListener('input', () => {
+                        this.validateForm();
+                        this.saveState();
+                    });
+                    input.addEventListener('change', () => {
+                        this.validateForm();
+                        this.saveState();
+                    });
                 });
 
                 // Photo upload
@@ -466,6 +475,7 @@
                 this.photos.push(photoData);
                 this.updateUI();
                 this.resetForm();
+                this.saveState();
                 this.showStatus(`Photo added: ${filename}`, 'success');
             }
 
@@ -477,6 +487,7 @@
             deletePhoto(photoId) {
                 this.photos = this.photos.filter(photo => photo.id !== photoId);
                 this.updateUI();
+                this.saveState();
                 this.showStatus('Photo deleted', 'success');
             }
 
@@ -503,19 +514,35 @@
                 const item = document.createElement('div');
                 item.className = 'photo-item';
 
-                // Create thumbnail
-                const thumb = document.createElement('img');
+                // Create thumbnail or placeholder
+                const thumb = document.createElement('div');
                 thumb.className = 'photo-thumb';
-                thumb.src = URL.createObjectURL(photo.file);
+                
+                if (photo.file) {
+                    const img = document.createElement('img');
+                    img.className = 'photo-thumb';
+                    img.src = URL.createObjectURL(photo.file);
+                    item.appendChild(img);
+                } else {
+                    thumb.style.display = 'flex';
+                    thumb.style.alignItems = 'center';
+                    thumb.style.justifyContent = 'center';
+                    thumb.style.backgroundColor = '#f8f9fa';
+                    thumb.style.border = '2px dashed #dee2e6';
+                    thumb.style.fontSize = '24px';
+                    thumb.textContent = '📷';
+                    item.appendChild(thumb);
+                }
 
                 // Create info section
                 const info = document.createElement('div');
                 info.className = 'photo-info';
+                const statusText = photo.file ? '' : '<br><small style="color: #e74c3c;">⚠️ Photo file not available after refresh</small>';
                 info.innerHTML = `
                     <div class="photo-filename">${photo.filename}</div>
                     <div class="photo-details">
                         ${photo.restaurantNumber} • ${photo.location} • ${photo.equipmentType} • ${photo.beforeAfter}<br>
-                        Added: ${photo.timestamp}
+                        Added: ${photo.timestamp}${statusText}
                     </div>
                 `;
 
@@ -525,7 +552,6 @@
                 deleteBtn.textContent = '🗑️';
                 deleteBtn.onclick = () => this.deletePhoto(photo.id);
 
-                item.appendChild(thumb);
                 item.appendChild(info);
                 item.appendChild(deleteBtn);
 
@@ -567,6 +593,64 @@
                 setTimeout(() => {
                     this.status.innerHTML = '';
                 }, 3000);
+            }
+
+            saveState() {
+                try {
+                    const state = {
+                        formData: {
+                            restaurantNumber: this.restaurantNumber.value,
+                            location: this.location.value,
+                            equipmentType: this.equipmentType.value,
+                            beforeAfter: this.beforeAfter.value
+                        },
+                        photos: this.photos.map(photo => ({
+                            id: photo.id,
+                            filename: photo.filename,
+                            restaurantNumber: photo.restaurantNumber,
+                            location: photo.location,
+                            equipmentType: photo.equipmentType,
+                            beforeAfter: photo.beforeAfter,
+                            timestamp: photo.timestamp,
+                            fileData: null
+                        })),
+                        timestamp: new Date().toISOString()
+                    };
+                    localStorage.setItem('wellnessPhotoManager', JSON.stringify(state));
+                } catch (error) {
+                    console.warn('Failed to save state to localStorage:', error);
+                }
+            }
+
+            loadState() {
+                try {
+                    const saved = localStorage.getItem('wellnessPhotoManager');
+                    if (saved) {
+                        const state = JSON.parse(saved);
+                        
+                        if (state.formData) {
+                            this.restaurantNumber.value = state.formData.restaurantNumber || '';
+                            this.location.value = state.formData.location || '';
+                            this.equipmentType.value = state.formData.equipmentType || '';
+                            this.beforeAfter.value = state.formData.beforeAfter || '';
+                        }
+
+                        if (state.photos && Array.isArray(state.photos)) {
+                            this.photos = state.photos.filter(photo => photo.filename);
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Failed to load state from localStorage:', error);
+                    localStorage.removeItem('wellnessPhotoManager');
+                }
+            }
+
+            clearState() {
+                try {
+                    localStorage.removeItem('wellnessPhotoManager');
+                } catch (error) {
+                    console.warn('Failed to clear localStorage:', error);
+                }
             }
         }
 

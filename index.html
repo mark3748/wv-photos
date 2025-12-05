@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -8,13 +9,15 @@
     <meta name="apple-mobile-web-app-title" content="Wellness Photos">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#3498db">
-    
+
     <!-- PWA Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233498db'/%3E%3Cstop offset='100%25' style='stop-color:%232980b9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23bg)'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='45' text-anchor='middle' fill='white'%3E📷%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233498db'/%3E%3Cstop offset='100%25' style='stop-color:%232980b9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23bg)'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='45' text-anchor='middle' fill='white'%3E📷%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
     <!-- Web App Manifest -->
-    <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Wellness%20Photo%20Manager%22%2C%22short_name%22%3A%22Wellness%20Photos%22%2C%22description%22%3A%22Capture%20and%20organize%20inspection%20photos%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23667eea%22%2C%22theme_color%22%3A%22%233498db%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A//www.w3.org/2000/svg%2527%2520viewBox%253D%25270%25200%2520192%2520192%2527%253E%253Cdefs%253E%253ClinearGradient%2520id%253D%2527bg%2527%2520x1%253D%25270%252525%2527%2520y1%253D%25270%252525%2527%2520x2%253D%2527100%252525%2527%2520y2%253D%2527100%252525%2527%253E%253Cstop%2520offset%253D%25270%252525%2527%2520style%253D%2527stop-color%253A%25233498db%2527/%253E%253Cstop%2520offset%253D%2527100%252525%2527%2520style%253D%2527stop-color%253A%25232980b9%2527/%253E%253C/linearGradient%253E%253C/defs%253E%253Crect%2520width%253D%2527192%2527%2520height%253D%2527192%2527%2520rx%253D%252742%2527%2520fill%253D%2527url%2528%2523bg%2529%2527/%253E%253Ctext%2520x%253D%252796%2527%2520y%253D%2527130%2527%2520font-family%253D%2527Arial%2527%2520font-size%253D%252785%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%253E%25F0%259F%2593%25B7%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%2C%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A//www.w3.org/2000/svg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Cdefs%253E%253ClinearGradient%2520id%253D%2527bg%2527%2520x1%253D%25270%252525%2527%2520y1%253D%25270%252525%2527%2520x2%253D%2527100%252525%2527%2520y2%253D%2527100%252525%2527%253E%253Cstop%2520offset%253D%25270%252525%2527%2520style%253D%2527stop-color%253A%25233498db%2527/%253E%253Cstop%2520offset%253D%2527100%252525%2527%2520style%253D%2527stop-color%253A%25232980b9%2527/%253E%253C/linearGradient%253E%253C/defs%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527112%2527%2520fill%253D%2527url%2528%2523bg%2529%2527/%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527340%2527%2520font-family%253D%2527Arial%2527%2520font-size%253D%2527220%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%253E%25F0%259F%2593%25B7%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%5D%7D">
-    
+    <link rel="manifest"
+        href="data:application/json,%7B%22name%22%3A%22Wellness%20Photo%20Manager%22%2C%22short_name%22%3A%22Wellness%20Photos%22%2C%22description%22%3A%22Capture%20and%20organize%20inspection%20photos%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23667eea%22%2C%22theme_color%22%3A%22%233498db%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A//www.w3.org/2000/svg%2527%2520viewBox%253D%25270%25200%2520192%2520192%2527%253E%253Cdefs%253E%253ClinearGradient%2520id%253D%2527bg%2527%2520x1%253D%25270%252525%2527%2520y1%253D%25270%252525%2527%2520x2%253D%2527100%252525%2527%2520y2%253D%2527100%252525%2527%253E%253Cstop%2520offset%253D%25270%252525%2527%2520style%253D%2527stop-color%253A%25233498db%2527/%253E%253Cstop%2520offset%253D%2527100%252525%2527%2520style%253D%2527stop-color%253A%25232980b9%2527/%253E%253C/linearGradient%253E%253C/defs%253E%253Crect%2520width%253D%2527192%2527%2520height%253D%2527192%2527%2520rx%253D%252742%2527%2520fill%253D%2527url%2528%2523bg%2529%2527/%253E%253Ctext%2520x%253D%252796%2527%2520y%253D%2527130%2527%2520font-family%253D%2527Arial%2527%2520font-size%253D%252785%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%253E%25F0%259F%2593%25B7%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%2C%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A//www.w3.org/2000/svg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Cdefs%253E%253ClinearGradient%2520id%253D%2527bg%2527%2520x1%253D%25270%252525%2527%2520y1%253D%25270%252525%2527%2520x2%253D%2527100%252525%2527%2520y2%253D%2527100%252525%2527%253E%253Cstop%2520offset%253D%25270%252525%2527%2520style%253D%2527stop-color%253A%25233498db%2527/%253E%253Cstop%2520offset%253D%2527100%252525%2527%2520style%253D%2527stop-color%253A%25232980b9%2527/%253E%253C/linearGradient%253E%253C/defs%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527112%2527%2520fill%253D%2527url%2528%2523bg%2529%2527/%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527340%2527%2520font-family%253D%2527Arial%2527%2520font-size%253D%2527220%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%253E%25F0%259F%2593%25B7%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%5D%7D">
+
     <title>Wellness Photo Manager</title>
     <style>
         * {
@@ -39,7 +42,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
             min-height: calc(100vh - 20px);
         }
@@ -76,7 +79,8 @@
             color: #2c3e50;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 16px 15px;
             border: 2px solid #e0e0e0;
@@ -88,7 +92,8 @@
             appearance: none;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: #3498db;
         }
@@ -104,7 +109,8 @@
             touch-action: manipulation;
         }
 
-        .photo-upload:hover, .photo-upload:active {
+        .photo-upload:hover,
+        .photo-upload:active {
             background-color: #f8f9ff;
         }
 
@@ -134,7 +140,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .btn:hover, .btn:active {
+        .btn:hover,
+        .btn:active {
             transform: translateY(-2px);
         }
 
@@ -243,24 +250,26 @@
                 margin: 10px;
                 border-radius: 10px;
             }
-            
+
             .header {
                 padding: 20px 15px;
             }
-            
+
             .form-section {
                 padding: 20px 15px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <h1>📸 Wellness Photo Manager</h1>
             <p>Capture, organize, and download your inspection photos</p>
             <p>***</p>
-            <p>Note: Refreshing page will lose all photos that have not been downloaded. The names will be saved but you will need to re-upload the photos.</p>
+            <p>Note: Refreshing page will lose all photos that have not been downloaded. The names will be saved but you
+                will need to re-upload the photos.</p>
         </div>
 
         <div class="form-section">
@@ -281,6 +290,7 @@
                     <option value="POS">POS Terminal</option>
                     <option value="KPS">Kitchen Display System</option>
                     <option value="CD">Cash Drawer</option>
+                    <option value="FrontCounter">Front Counter</option>
                     <option value="Printer">Printer</option>
                     <option value="Network">Network Equipment</option>
                     <option value="AP">Access Point</option>
@@ -399,11 +409,11 @@
             }
 
             validateForm() {
-                const isValid = this.restaurantNumber.value && 
-                                this.location.value && 
-                                this.equipmentType.value && 
-                                this.beforeAfter.value &&
-                                this.photoInput.files.length > 0;
+                const isValid = this.restaurantNumber.value &&
+                    this.location.value &&
+                    this.equipmentType.value &&
+                    this.beforeAfter.value &&
+                    this.photoInput.files.length > 0;
 
                 this.addPhotoBtn.disabled = !isValid;
             }
@@ -424,15 +434,15 @@
             generateFilename(restaurantNum, location, equipment, beforeAfter, extension, index = '') {
                 // Format restaurant number with leading zeros (5 digits)
                 const formattedRestaurant = restaurantNum.toString().padStart(5, '0');
-                
+
                 // Clean up values (remove spaces)
                 const cleanLocation = location.replace(/\s+/g, '');
                 const cleanEquipment = equipment.replace(/\s+/g, '');
                 const cleanBeforeAfter = beforeAfter.replace(/\s+/g, '');
-                
+
                 // Add index suffix if provided
                 const suffix = index ? `_${index}` : '';
-                
+
                 return `${formattedRestaurant}-${cleanLocation}-${cleanEquipment}-${cleanBeforeAfter}${suffix}.${extension}`;
             }
 
@@ -517,7 +527,7 @@
                 // Create thumbnail or placeholder
                 const thumb = document.createElement('div');
                 thumb.className = 'photo-thumb';
-                
+
                 if (photo.file) {
                     const img = document.createElement('img');
                     img.className = 'photo-thumb';
@@ -570,7 +580,7 @@
                     }
 
                     // Generate zip file
-                    const content = await zip.generateAsync({type: 'blob'});
+                    const content = await zip.generateAsync({ type: 'blob' });
 
                     // Create download link
                     const restaurantNum = this.photos[0].restaurantNumber.padStart(5, '0');
@@ -627,7 +637,7 @@
                     const saved = localStorage.getItem('wellnessPhotoManager');
                     if (saved) {
                         const state = JSON.parse(saved);
-                        
+
                         if (state.formData) {
                             this.restaurantNumber.value = state.formData.restaurantNumber || '';
                             this.location.value = state.formData.location || '';
@@ -665,4 +675,5 @@
         }
     </script>
 </body>
+
 </html>

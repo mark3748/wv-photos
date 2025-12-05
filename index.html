@@ -369,6 +369,7 @@
                 this.photosCount = document.getElementById('photosCount');
                 this.downloadBtn = document.getElementById('downloadBtn');
                 this.clearAllBtn = document.getElementById('clearAllBtn');
+                if (!this.clearAllBtn) console.error('Clear All Button not found!');
                 this.status = document.getElementById('status');
             }
 
@@ -413,7 +414,9 @@
                 this.downloadBtn.addEventListener('click', () => this.downloadPhotos());
 
                 // Clear all button
-                this.clearAllBtn.addEventListener('click', () => this.clearAllPhotos());
+                if (this.clearAllBtn) {
+                    this.clearAllBtn.addEventListener('click', () => this.clearAllPhotos());
+                }
             }
 
             validateForm() {
@@ -525,20 +528,23 @@
                 this.photosCount.textContent = `${this.photos.length} photo${this.photos.length !== 1 ? 's' : ''}`;
 
                 // Show/hide download button
+                // Show/hide download button
                 if (this.photos.length > 0) {
-                    this.downloadBtn.classList.remove('hidden');
-                    this.clearAllBtn.classList.remove('hidden');
+                    if (this.downloadBtn) this.downloadBtn.classList.remove('hidden');
+                    if (this.clearAllBtn) this.clearAllBtn.classList.remove('hidden');
                 } else {
-                    this.downloadBtn.classList.add('hidden');
-                    this.clearAllBtn.classList.add('hidden');
+                    if (this.downloadBtn) this.downloadBtn.classList.add('hidden');
+                    if (this.clearAllBtn) this.clearAllBtn.classList.add('hidden');
                 }
 
                 // Update photos list
-                this.photosList.innerHTML = '';
-                this.photos.forEach(photo => {
-                    const photoItem = this.createPhotoItem(photo);
-                    this.photosList.appendChild(photoItem);
-                });
+                if (this.photosList) {
+                    this.photosList.innerHTML = '';
+                    this.photos.forEach(photo => {
+                        const photoItem = this.createPhotoItem(photo);
+                        this.photosList.appendChild(photoItem);
+                    });
+                }
             }
 
             createPhotoItem(photo) {

@@ -337,6 +337,10 @@
             <button class="btn download-btn hidden" id="downloadBtn">
                 📥 Download All Photos (ZIP)
             </button>
+            <button class="btn delete-btn hidden" id="clearAllBtn"
+                style="margin-top: 10px; width: 100%; background: #e74c3c;">
+                🗑️ Clear All Photos
+            </button>
         </div>
 
         <div id="status"></div>
@@ -364,6 +368,7 @@
                 this.photosList = document.getElementById('photosList');
                 this.photosCount = document.getElementById('photosCount');
                 this.downloadBtn = document.getElementById('downloadBtn');
+                this.clearAllBtn = document.getElementById('clearAllBtn');
                 this.status = document.getElementById('status');
             }
 
@@ -406,6 +411,9 @@
 
                 // Download button
                 this.downloadBtn.addEventListener('click', () => this.downloadPhotos());
+
+                // Clear all button
+                this.clearAllBtn.addEventListener('click', () => this.clearAllPhotos());
             }
 
             validateForm() {
@@ -501,6 +509,17 @@
                 this.showStatus('Photo deleted', 'success');
             }
 
+            clearAllPhotos() {
+                if (this.photos.length === 0) return;
+
+                if (confirm('Are you sure you want to delete ALL photos? This action cannot be undone.')) {
+                    this.photos = [];
+                    this.updateUI();
+                    this.saveState();
+                    this.showStatus('All photos deleted', 'success');
+                }
+            }
+
             updateUI() {
                 // Update photos count
                 this.photosCount.textContent = `${this.photos.length} photo${this.photos.length !== 1 ? 's' : ''}`;
@@ -508,8 +527,10 @@
                 // Show/hide download button
                 if (this.photos.length > 0) {
                     this.downloadBtn.classList.remove('hidden');
+                    this.clearAllBtn.classList.remove('hidden');
                 } else {
                     this.downloadBtn.classList.add('hidden');
+                    this.clearAllBtn.classList.add('hidden');
                 }
 
                 // Update photos list

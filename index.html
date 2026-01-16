@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Wellness Photos">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#3498db">
+    <meta name="theme-color" content="#09099d">
 
     <!-- PWA Icons -->
     <link rel="icon" type="image/svg+xml"
@@ -28,7 +28,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #09099d 0%, #e825ba 100%);
             min-height: 100vh;
             padding: 10px;
             -webkit-user-select: none;
@@ -48,7 +48,7 @@
         }
 
         .header {
-            background: linear-gradient(45deg, #2c3e50, #3498db);
+            background: linear-gradient(45deg, #09099d, #e825ba);
             color: white;
             padding: 30px 20px;
             text-align: center;
@@ -95,11 +95,11 @@
         input:focus,
         select:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #09099d;
         }
 
         .photo-upload {
-            border: 3px dashed #3498db;
+            border: 3px dashed #09099d;
             border-radius: 10px;
             padding: 40px 20px;
             text-align: center;
@@ -121,7 +121,7 @@
 
         .upload-icon {
             font-size: 64px;
-            color: #3498db;
+            color: #09099d;
             margin-bottom: 15px;
         }
 
@@ -287,23 +287,21 @@
                 <label for="equipmentType">Equipment Type</label>
                 <select id="equipmentType" required>
                     <option value="">Select equipment type</option>
-                    <option value="POS">POS Terminal</option>
-                    <option value="KPS">Kitchen Display System</option>
-                    <option value="CD">Cash Drawer</option>
-                    <option value="FrontCounter">Front Counter</option>
-                    <option value="Printer">Printer</option>
-                    <option value="Network">Network Equipment</option>
-                    <option value="AP">Access Point</option>
-                    <option value="Scanner">Scanner/Barcode Reader</option>
-                    <option value="UPS">UPS/Battery Backup</option>
-                    <option value="Router">Router</option>
-                    <option value="Switch">Network Switch</option>
-                    <option value="Modem">Modem</option>
-                    <option value="Tablet">Tablet</option>
-                    <option value="Monitor">Monitor/Display</option>
-                    <option value="Server">Server</option>
-                    <option value="Cable">Cabling/Infrastructure</option>
-                    <option value="Other">Other IT Equipment</option>
+                    <option value="PatchPanel">Patch Panel (Front/Rear DTT)</option>
+                    <option value="NetworkEquip">Network Equipment</option>
+                    <option value="LAPC_Powervar">LAPC / Powervar 800</option>
+                    <option value="Desktop">Desktop (Monitor/Printers)</option>
+                    <option value="USB_WallPort">USB Wall Port</option>
+                    <option value="NetworkJacks">CFA Access Network Jacks</option>
+                    <option value="Register">Register</option>
+                    <option value="KPS">KPS Monitor</option>
+                    <option value="FullRegister">Full Register Station</option>
+                    <option value="BBU">BBU (Battery Backup)</option>
+                    <option value="PowerNetworkUnder">Power/Network (Under Counter)</option>
+                    <option value="CounterCustomer">Counter (Customer Side)</option>
+                    <option value="Wifi_AP">Wifi Antenna / Access Point</option>
+                    <option value="Unique">Unique/Unusual Equipment</option>
+                    <option value="NewEquip">New Equipment / Wiring Before</option>
                 </select>
             </div>
 
@@ -457,47 +455,110 @@
                 return `${formattedRestaurant}-${cleanLocation}-${cleanEquipment}-${cleanBeforeAfter}${suffix}.${extension}`;
             }
 
-            addCurrentPhoto() {
-                const file = this.photoInput.files[0];
-                if (!file) return;
+            resizeImage(file, maxWidth = 1280, quality = 0.8) {
+                return new Promise((resolve, reject) => {
+                    if (!file.type.match(/image.*/)) {
+                        resolve(file);
+                        return;
+                    }
 
-                const restaurantNum = this.restaurantNumber.value;
-                const location = this.location.value;
-                const equipment = this.equipmentType.value;
-                const beforeAfter = this.beforeAfter.value;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            let width = img.width;
+                            let height = img.height;
 
-                // Get file extension
-                const extension = file.name.split('.').pop().toLowerCase();
+                            if (width > maxWidth || height > maxWidth) {
+                                if (width > height) {
+                                    height = Math.round(height * (maxWidth / width));
+                                    width = maxWidth;
+                                } else {
+                                    width = Math.round(width * (maxWidth / height));
+                                    height = maxWidth;
+                                }
+                            }
 
-                // Check for duplicate filenames and add index if needed
-                let index = '';
-                let baseFilename = this.generateFilename(restaurantNum, location, equipment, beforeAfter, extension);
-                let filename = baseFilename;
-                let counter = 1;
+                            const canvas = document.createElement('canvas');
+                            canvas.width = width;
+                            canvas.height = height;
 
-                while (this.photos.some(photo => photo.filename === filename)) {
-                    index = counter.toString();
-                    filename = this.generateFilename(restaurantNum, location, equipment, beforeAfter, extension, index);
-                    counter++;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            canvas.toBlob((blob) => {
+                                if (!blob) {
+                                    reject(new Error('Canvas is empty'));
+                                    return;
+                                }
+                                const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                                    type: 'image/jpeg',
+                                    lastModified: Date.now()
+                                });
+                                resolve(newFile);
+                            }, 'image/jpeg', quality);
+                        };
+                        img.onerror = reject;
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            async addCurrentPhoto() {
+                const originalFile = this.photoInput.files[0];
+                if (!originalFile) return;
+
+                // Disable button and show status
+                this.addPhotoBtn.disabled = true;
+                this.showStatus('Processing image...', 'success');
+
+                try {
+                    const file = await this.resizeImage(originalFile);
+
+                    const restaurantNum = this.restaurantNumber.value;
+                    const location = this.location.value;
+                    const equipment = this.equipmentType.value;
+                    const beforeAfter = this.beforeAfter.value;
+
+                    // Get file extension - we force jpg now
+                    const extension = 'jpg';
+
+                    // Check for duplicate filenames and add index if needed
+                    let index = '';
+                    let baseFilename = this.generateFilename(restaurantNum, location, equipment, beforeAfter, extension);
+                    let filename = baseFilename;
+                    let counter = 1;
+
+                    while (this.photos.some(photo => photo.filename === filename)) {
+                        index = counter.toString();
+                        filename = this.generateFilename(restaurantNum, location, equipment, beforeAfter, extension, index);
+                        counter++;
+                    }
+
+                    // Create photo object
+                    const photoData = {
+                        id: Date.now(),
+                        file: file,
+                        filename: filename,
+                        restaurantNumber: restaurantNum,
+                        location: location,
+                        equipmentType: equipment,
+                        beforeAfter: beforeAfter,
+                        timestamp: new Date().toLocaleString()
+                    };
+
+                    this.photos.push(photoData);
+                    this.updateUI();
+                    this.resetForm();
+                    this.saveState();
+                    this.showStatus(`Photo added: ${filename}`, 'success');
+                } catch (error) {
+                    console.error(error);
+                    this.showStatus('Error processing photo: ' + error.message, 'error');
+                    this.addPhotoBtn.disabled = false;
                 }
-
-                // Create photo object
-                const photoData = {
-                    id: Date.now(),
-                    file: file,
-                    filename: filename,
-                    restaurantNumber: restaurantNum,
-                    location: location,
-                    equipmentType: equipment,
-                    beforeAfter: beforeAfter,
-                    timestamp: new Date().toLocaleString()
-                };
-
-                this.photos.push(photoData);
-                this.updateUI();
-                this.resetForm();
-                this.saveState();
-                this.showStatus(`Photo added: ${filename}`, 'success');
             }
 
             resetForm() {
